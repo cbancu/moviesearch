@@ -1,8 +1,17 @@
 
 import React, { Component } from 'react';
-import {Text, View, StatusBar , ActivityIndicator, ListView, ListViewDataSource, StyleSheet, TextInput } from 'react-native'
+import {Text, View, 
+    StatusBar , 
+    ActivityIndicator, 
+    ListView, 
+    ListViewDataSource, 
+    StyleSheet, 
+    TextInput,
+    TouchableWithoutFeedback, 
+    Keyboard } from 'react-native'
 import { debounce }  from 'lodash';
 import MovieItem from './MovieItem';
+
 
 export default class Main extends Component {
 
@@ -46,22 +55,22 @@ export default class Main extends Component {
     }
 
     render() {
-
-        if(this.state.isLoading) { 
-            return(
-                <View style={{flex:1,  paddingTop:20}}>
-                    <ActivityIndicator/>
-                </View>
-            );
-        }
-
         const { movies } = this.state;
 
         return (
             <View style={styles.container}>
                 <StatusBar barStyle="light-content" />
 
-                <TextInput underlineColorAndroid='rgba(0,0,0,0)' placeholder="Search by movie name" placeholderTextColor='grey' style={ styles.searchBox } onChangeText={ this.searchForMovies } />
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                        <TextInput 
+                            underlineColorAndroid='rgba(0,0,0,0)' 
+                            placeholder="Search by movie name" 
+                            placeholderTextColor='grey' 
+                            style={ styles.searchBox } 
+                            onChangeText={ this.searchForMovies } />
+                </TouchableWithoutFeedback>
+
+                
 
                 {this.state.isLoading && 
                     <View style={{flex:1,  paddingTop:20}}>
@@ -69,9 +78,9 @@ export default class Main extends Component {
                     </View>
                 }
 
-                {this.state.isLoading===false && 
-                    <ListView  dataSource= { movies } style={ styles.listView } renderRow={ this.renderRow } />
-                }
+                {this.state.isLoading===false &&   
+                    <ListView  enableEmptySections={true}  dataSource= { movies } style={ styles.listView } renderRow={ this.renderRow } />
+                }   
             </View>
         )
     }
@@ -91,6 +100,11 @@ export default class Main extends Component {
                 this.setState({
                     movies: this.state.movies.cloneWithRows(responseJson.Search),
                   });
+            }
+            else { 
+                this.setState({ 
+                    movies : this.state.movies.cloneWithRows([]),
+                })
             }
             
         }
