@@ -8,7 +8,8 @@ import {Text, View,
     StyleSheet, 
     TextInput,
     TouchableWithoutFeedback, 
-    Keyboard } from 'react-native'
+    Keyboard, 
+    ScrollView } from 'react-native'
 import { debounce }  from 'lodash';
 import MovieItem from './MovieItem';
 
@@ -40,7 +41,9 @@ export default class Main extends Component {
         const movieInfo = { 
             routeId: 'Details',
             title : movie.Title,
-            url : `http://www.imdb.com/title/${movie.imdbID}/`
+            url : `http://www.imdb.com/title/${movie.imdbID}/`,
+            year : movie.Year, 
+            type : movie.Type
         }; 
 
         const imageUrl = movie.Poster ? movie.Poster : null; 
@@ -70,8 +73,6 @@ export default class Main extends Component {
                             onChangeText={ this.searchForMovies } />
                 </TouchableWithoutFeedback>
 
-                
-
                 {this.state.isLoading && 
                     <View style={{flex:1,  paddingTop:20}}>
                         <ActivityIndicator/>
@@ -79,7 +80,9 @@ export default class Main extends Component {
                 }
 
                 {this.state.isLoading===false &&   
-                    <ListView  enableEmptySections={true}  dataSource= { movies } style={ styles.listView } renderRow={ this.renderRow } />
+                    <ScrollView style={styles.listView}>
+                        <ListView  enableEmptySections={true}  dataSource= { movies } style={ styles.listView } renderRow={ this.renderRow } />
+                    </ScrollView>
                 }   
             </View>
         )

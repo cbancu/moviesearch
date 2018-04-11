@@ -5,7 +5,7 @@ export default class FadeInView extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        fadeAnim: new Animated.Value(-200),
+        fadeAnim: new Animated.Value(-1),
       };
     }
   
@@ -13,9 +13,9 @@ export default class FadeInView extends Component {
       const { delay } = this.props;
   
       Animated.timing(this.state.fadeAnim, {
-        toValue: 0,
+        toValue: 1,
         delay: delay,
-        duration: 500,
+        duration: 1500,
       })
       .start();
     }
@@ -23,7 +23,7 @@ export default class FadeInView extends Component {
     render() {
       return (
         <Animated.View
-          style={{ marginLeft: this.state.fadeAnim }}>
+          style={{ opacity : this.state.fadeAnim }}>
           { this.props.children }
         </Animated.View>
      );
